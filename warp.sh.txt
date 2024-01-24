@@ -1,0 +1,39 @@
+
+#!/bin/bash
+# Connect using Warp
+warp-cli connect
+#just wait asecond
+# check IP for warp connection
+if ip route | grep -q 'default.*inet'; then
+  echo  'Warp IP connected' 
+else
+  echo 'Warp IP disconnected'
+  exit 1
+fi
+ 
+# Connect using OpenVPN (in the background)
+openvpn /home/kali/Download/isthat.ovpn &
+openvpn_pid=$!   #check the process work and store the num of it.
+#Check for OpenVPN process
+if ps -p $openvpn_pid > /dev/null; then
+   echo 'Connected to OVPN'
+else
+   echo 'disconnected to OVPN'
+   exit 1
+fi
+# Check IP for OpenVPN connection
+# just wait asecond to connEct with OVPN
+if hostname -I | grep -q '^10\.';  then
+  echo "OVPN IP connect"
+else
+  echo 'OVPN IP disconnected'
+  exit 1  # Exit the script 
+fi
+
+# Second check: ping 10.10.10.10 -c 3
+ping -c 3 10.10.10.10
+
+# Disconnect from Warp
+warp-cli disconnect
+
+echo 'VPN operation is done'

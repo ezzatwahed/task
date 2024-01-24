@@ -1,0 +1,32 @@
+#!/bin/bash
+
+check required tools() {
+    if ! command -v "subfinder" > /dev/null 2>&1; then
+        echo "subfinder is not installed. Please install it before running this script."
+        exit 1
+    fi
+}
+
+main() {
+
+    input_file="domains.txt"
+    subdomains_file="subdomains.txt"
+    temp_file="temp_subdomains.txt"
+
+    # Initial enumeration
+    subfinder -dL "$input_file" -o "$subdomains_file"
+
+    # Number of iterations (customize as needed)
+    iterations=3
+
+    for ((i=1; i<=iterations; i++)); do
+        echo "Iteration $i:"
+
+        # use enumeration to call subdomains
+        subfinder -dL "$subdomains_file" -o "$temp_file"
+
+        # Merge new subdomains into the main list
+        sort -u "$temp_file" "$subdomains_file" -o "$subdomains_file"
+
+        echo "Subdomain enumeration completed for iteration $i."
+    done

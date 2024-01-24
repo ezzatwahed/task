@@ -1,0 +1,33 @@
+#!/bin/bash
+# echo 'Enter your path to your directory:'
+read path
+req_directory=path
+# check the req directory is exist
+if [ ! -d "$req_directory" ]; then
+    echo Directory not found '$req_directory'
+    exit 1
+    
+fi
+#  analyze files in the req_directory
+analyze_files() {
+    local directory="$1"
+    
+    echo  analyzing files in: '$req_directory'
+    
+
+    # Loop to check every file in req_directory
+    for file_path in "$req_directory"/*; do
+        # Check  isn't aspecified file
+        if [ -f "$file_path" ]; then
+            echo "File: $file_path"
+            
+            # using 'file' to show file inf
+            file "$file_path"
+            
+        fi
+   done
+
+    echo "Analysis completed."
+}
+
+

@@ -1,0 +1,9 @@
+#!/bin/bash 
+#script takes file path and gives you information about it
+echo "enter the file path:" 
+read path
+if [ -f  $path ]; then 
+    ls -l path 
+    else 
+    echo "file doesn't exist"
+fi

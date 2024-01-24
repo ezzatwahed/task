@@ -1,0 +1,17 @@
+!/bin/bash
+# path to backup
+backup_dir='/home/kali/Desktop/file'
+#  time of backup
+time=$(date +"%Y%m%d_%h%M%s")
+#  backup filename
+backup_file="home_backup_${time}"
+# the name of file to backup
+path_dir="/file"
+# using tar to make backup
+tar -czf "${backup_dir}/${backup_file}" "${path_dir}"
+# Check if the backup was successful
+if [ $? -eq 0 ]; then
+    echo Backup successful. "Backup file: ${backup_dir}/${backup_file}"
+else
+    echo Backup failed.
+fi
